@@ -1,5 +1,4 @@
 [submodule "vendor"]
 	path = vendor
 	url = https://github.com/GameTechDev/ISPCTextureCompressor.git
-[submodule "vendor/ISPC Texture Compressor"]
 	branch = origin/master
