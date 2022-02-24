@@ -27,10 +27,10 @@ jobs:
       # Runs a single command using the runners shell
       - name: Build binaries
         env: 
-          EXT: .lz
+          EXT: .gz
         run: |
           curl --create-dirs --output ispc_linux.tar$EXT https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
-          tar -xf ispc_linux.tar$EXT -C ispc/
+          tar -xvf ispc_linux.tar$EXT -C ispc/
           ls
 
       # Runs a set of commands using the runners shell
