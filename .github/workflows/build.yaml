@@ -30,22 +30,16 @@ jobs:
         run: |
           curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv ispc-v1.17.0-linux/bin/ispc
           cd ispc-v1.17.0-linux/bin
-          ls
           mv ispc ../../
           cd ../../
-          ls
-          ./ispc --help
-          ls
 
       - name: Build binaries
         
         run: | 
           PATH=$PATH:$PWD
-          ls -la
-          echo Path=$PATH
-          echo $PWD
-          cargo build --features=ispc
+          cd vendor/
           ls
+          cargo build --features=ispc
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
       # tar -xf ispc_linux.tar.gz -C ispc/
