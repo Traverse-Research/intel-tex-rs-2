@@ -30,7 +30,7 @@ jobs:
         run: |
           curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv ispc-v1.17.0-linux/bin/ispc
           mv ispc-v1.17.0-linux ispc
-          export PATH=%PWD
+          export PATH=$GITHUB_WORKSPACE
           cargo build --features=ispc
           ls
 
