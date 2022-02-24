@@ -38,7 +38,7 @@ jobs:
           PATH=$PATH:$PWD
           ls
           echo Path=$PATH
-          echo pwd=$PWD
+          echo $PWD
           cargo build --features=ispc
           ls
 
