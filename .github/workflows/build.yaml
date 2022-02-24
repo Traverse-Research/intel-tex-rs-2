@@ -28,7 +28,7 @@ jobs:
       - name: Build binaries
 
         run: |
-          curl --verbose -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar -z --create ispc.tar          
+          curl --verbose -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar -cz ispc.tar          
           ls
 
 
