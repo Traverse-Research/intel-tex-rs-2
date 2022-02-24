@@ -25,15 +25,18 @@ jobs:
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
-      - name: Build binaries
+      - name: Prepare Environment
 
         run: |
           curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv ispc-v1.17.0-linux/bin/ispc
           mv ispc-v1.17.0-linux ispc
           export PATH=$GITHUB_WORKSPACE
+
+      - name: Build binaries
+        
+        run: | 
           cargo build --features=ispc
           ls
-
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
       # tar -xf ispc_linux.tar.gz -C ispc/
