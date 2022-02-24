@@ -41,6 +41,30 @@ jobs:
         run: | 
           PATH=$PATH:$PWD
           cargo build --features=ispc
+          cd src/ispc
+          ls
+
+      - uses: actions/upload-artifact@v2
+        with: 
+          name: kernel.rs
+          path: src/ispc/kernel.rs
+
+      - uses: actions/upload-artifact@v2
+        with: 
+          name: kernel_astc.rs
+          path: src/ispc/kernel_astc.rs
+
+
+      - uses: actions/upload-artifact@v2
+        with: 
+          name: libkernelx86_64-unknown-linux-gnu
+          path: src/ispc/libkernelx86_64-unknown-linux-gnu
+
+      - uses: actions/upload-artifact@v2
+        with: 
+          name: libkernel_astcx86_64-unknown-linux-gnu
+          path: src/ispc/libkernel_astcx86_64-unknown-linux-gnu
+
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
       # tar -xf ispc_linux.tar.gz -C ispc/
