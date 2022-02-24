@@ -28,8 +28,10 @@ jobs:
       - name: Build binaries
 
         run: |
-          curl --create-dirs -L --output ispc_linux.tar.gz https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
-          tar -xf ispc_linux.tar.gz -C ispc/
+          mkdir ispc
+          curl --fail -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar -xzv -C /ispc 
+         # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
+         # tar -xf ispc_linux.tar.gz -C ispc/
           ls
 
       # Runs a set of commands using the runners shell
