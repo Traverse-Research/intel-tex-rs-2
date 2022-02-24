@@ -57,13 +57,13 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with: 
-          name: libkernelx86_64-unknown-linux-gnu
-          path: src/ispc/libkernelx86_64-unknown-linux-gnu
+          name: libkernelx86_64-unknown-linux-gnu.a
+          path: src/ispc/libkernelx86_64-unknown-linux-gnu.a
 
       - uses: actions/upload-artifact@v2
         with: 
-          name: libkernel_astcx86_64-unknown-linux-gnu
-          path: src/ispc/libkernel_astcx86_64-unknown-linux-gnu
+          name: libkernel_astcx86_64-unknown-linux-gnu.a
+          path: src/ispc/libkernel_astcx86_64-unknown-linux-gnu.a
 
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
