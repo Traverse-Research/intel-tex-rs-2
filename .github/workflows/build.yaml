@@ -28,7 +28,7 @@ jobs:
       - name: Build binaries
         run: |
           curl --create-dirs --output ispc_linux.tar.gz https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
-          tar -xf ispc_linux.tar.gz -c ispc/
+          tar -xf ispc_linux.tar.gz -C ispc/
           ls
 
       # Runs a set of commands using the runners shell
