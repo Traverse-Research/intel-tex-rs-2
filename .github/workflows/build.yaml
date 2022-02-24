@@ -29,7 +29,7 @@ jobs:
 
         run: |
           mkdir ispc
-          curl --verbose -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar --list          
+          curl --verbose -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar -z --list          
           ls
 
 
