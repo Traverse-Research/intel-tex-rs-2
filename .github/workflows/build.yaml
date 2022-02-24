@@ -40,10 +40,6 @@ jobs:
         
         run: | 
           PATH=$PATH:$PWD
-          ls
-          cd vendor/
-          ls
-          cd ../
           cargo build --features=ispc
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
