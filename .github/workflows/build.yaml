@@ -27,7 +27,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Build binaries
         run: |
-          curl --create-dirs --output https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
+          curl --create-dirs --output $GITHUB_WORKSPACE https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
           cd $GITHUB_WORKSPACE
           ls
 
