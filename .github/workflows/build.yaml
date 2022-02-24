@@ -21,14 +21,16 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access igitt
+        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access igitt
       - uses: actions/checkout@v2
 
       # Runs a single command using the runners shell
       - name: Build binaries
+        env: 
+          EXT: .lz
         run: |
-          curl --create-dirs --output ispc_linux.tar.xz https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
-          tar -xf ispc_linux.tar.xz -C ispc/
+          curl --create-dirs --output ispc_linux.tar$EXT https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
+          tar -xf ispc_linux.tar$EXT -C ispc/
           ls
 
       # Runs a set of commands using the runners shell
