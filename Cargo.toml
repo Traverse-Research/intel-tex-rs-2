@@ -37,20 +37,23 @@ travis-ci = { repository = "gwihlidal/intel-tex-rs" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
-ispc_rt = "1.0.2"
+ispc_rt = "1.0.6"
 
 [build-dependencies]
 ispc_compile = { version = "1.0.4", optional = true }
-ispc_rt = "1.0.2"
+ispc_rt = "1.0.6"
 
 [features]
 ispc = ["ispc_compile"]
 
 [dev-dependencies]
-ddsfile = "0.2.3"
-image = "0.21.0"
+ddsfile = "0.5.0"
+image = "0.24.1"
 
 [profile.release]
 lto = true
 opt-level = 3
 codegen-units = 1
+
+[patch.crates-io]
+ispc_rt = { git = "https://github.com/Traverse-Research/ispc-rs.git" }
