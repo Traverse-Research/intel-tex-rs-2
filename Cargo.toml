@@ -56,4 +56,4 @@ opt-level = 3
 codegen-units = 1
 
 [patch.crates-io]
-ispc_rt = { git = "https://github.com/Traverse-Research/ispc-rs.git" }
+ispc_rt = { git = "https://github.com/Traverse-Research/ispc-rs.git", rev = "0d00819" }
