@@ -91,24 +91,13 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with: 
-          name: kernel.rs
-          path: src/ispc/kernel.rs
+          name: libkernelx86_64-apple-darwin.a
+          path: src/ispc/libkernelx86_64-apple-darwin.a
 
       - uses: actions/upload-artifact@v2
         with: 
-          name: kernel_astc.rs
-          path: src/ispc/kernel_astc.rs
-
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libkernelx86_64-apple-darwin-gnu.a
-          path: src/ispc/libkernelx86_64-apple-darwin-gnu.a
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libkernel_astcx86_64-apple-darwin-gnu.a
-          path: src/ispc/libkernel_astcx86_64-apple-darwin-gnu.a
+          name: libkernel_astcx86_64-apple-darwin.a
+          path: src/ispc/libkernel_astcx86_64-apple-darwin.a
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
       # tar -xf ispc_linux.tar.gz -C ispc/
