@@ -73,7 +73,21 @@ jobs:
 
       - name: Prepare Environment
         run: |
-          brew install curl
+          git submodule update --init
+          cd vendor/
+          cd ../
+          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv ispc-v1.17.0-linux/bin/ispc
+          cd ispc-v1.17.0-linux/bin
+          mv ispc ../../
+          cd ../../
+          ls
+
+      - name: Build binaries        
+        run: | 
+          PATH=$PATH:$PWD
+          cargo build --features=ispc
+          cd src/ispc
+          ls
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
       # tar -xf ispc_linux.tar.gz -C ispc/
