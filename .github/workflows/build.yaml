@@ -76,8 +76,8 @@ jobs:
           git submodule update --init
           cd vendor/
           cd ../
-          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv ispc-v1.17.0-linux/bin/ispc
-          cd ispc-v1.17.0-linux/bin
+          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-macOS.tar.gz | tar xzv ispc-v1.17.0-macOS/bin/ispc
+          cd ispc-v1.17.0-macOS/bin
           mv ispc ../../
           cd ../../
           ls
