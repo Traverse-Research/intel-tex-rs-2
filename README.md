@@ -1,14 +1,16 @@
-# intel_tex_rs_2
-========
+# intel-tex-rs-2
 
-[![Latest version](https://img.shields.io/crates/v/intel_tex.svg)](https://crates.io/crates/intel_tex)
-[![Documentation](https://docs.rs/intel_tex/badge.svg)](https://docs.rs/intel_tex)
-[![](https://tokei.rs/b1/github/gwihlidal/intel-tex-rs)](https://github.com/gwihlidal/intel-tex-rs)
+
+[![Latest version](https://img.shields.io/crates/v/intel_tex_2.svg)](https://crates.io/crates/intel_tex_2)
+[![Documentation](https://docs.rs/intel_tex_2/badge.svg)](https://docs.rs/intel_tex_2)
+[![](https://tokei.rs/b1/github/Traverse-Research/intel-tex-rs-2)](https://github.com/Traverse-Research/intel-tex-rs-2)
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 ![APACHE2](https://img.shields.io/badge/license-APACHE2-blue.svg)
+
+## About
+
 Forked from Graham Wihlidal's rust bindings repo for the ISPC texture compressor.
 * Graham's repo: https://github.com/gwihlidal/intel-tex-rs
- 
 * ISPC texture compressor: https://github.com/GameTechDev/ISPCTextureCompressor
 
 State of the art texture compression for BC6H, BC7, ETC1, ASTC and BC1/BC3.
