@@ -1,4 +1,4 @@
-# intel-tex-rs-2
+# Rust bindings for ISPC Texture Compressor
 
 
 [![Latest version](https://img.shields.io/crates/v/intel_tex_2.svg)](https://crates.io/crates/intel_tex_2)
