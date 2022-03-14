@@ -37,11 +37,11 @@ travis-ci = { repository = "gwihlidal/intel-tex-rs" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
-ispc_rt = "1.0.6"
+ispc_rt = "1.0.7"
 
 [build-dependencies]
 ispc_compile = { version = "1.0.4", optional = true }
-ispc_rt = "1.0.6"
+ispc_rt = "1.0.7"
 
 [features]
 ispc = ["ispc_compile"]
