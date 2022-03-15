@@ -1,15 +1,11 @@
-extern crate ddsfile;
-extern crate image;
-extern crate intel_tex;
-
 use image::GenericImageView;
 use image::ImageBuffer;
 use image::Pixel;
-use intel_tex::bc7;
+use intel_tex_2::bc7;
 use std::fs::File;
 use std::path::Path;
 
-use ddsfile::{AlphaMode, Caps2, D3D10ResourceDimension, Dds, DxgiFormat};
+use ddsfile::{AlphaMode, Caps2, D3D10ResourceDimension, Dds, DxgiFormat, NewDxgiParams};
 
 fn main() {
     let rgb_img = image::open(&Path::new("examples/lambertian.jpg")).unwrap();
@@ -30,7 +26,7 @@ fn main() {
         }
     }
 
-    let block_count = intel_tex::divide_up_by_multiple(width * height, 16);
+    let block_count = intel_tex_2::divide_up_by_multiple(width * height, 16);
     println!("Block count: {}", block_count);
 
     let mip_count = 1;
@@ -42,20 +38,22 @@ fn main() {
     let depth = 1;
 
     let mut dds = Dds::new_dxgi(
-        height,
-        width,
-        Some(depth),
-        DxgiFormat::BC7_UNorm,
-        Some(mip_count),
-        Some(array_layers),
-        Some(caps2),
-        is_cubemap,
-        resource_dimension,
-        alpha_mode,
+        NewDxgiParams {
+            height,
+            width,
+            depth: Some(depth),
+            format: DxgiFormat::BC7_UNorm,
+            mipmap_levels: Some(mip_count),
+            array_layers: Some(array_layers),
+            caps2: Some(caps2),
+            is_cubemap,
+            resource_dimension,
+            alpha_mode,
+        }
     )
     .unwrap();
 
-    let surface = intel_tex::RgbaSurface {
+    let surface = intel_tex_2::RgbaSurface {
         width,
         height,
         stride: width * 4,

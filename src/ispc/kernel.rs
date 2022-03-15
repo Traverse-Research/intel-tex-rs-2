@@ -12,6 +12,7 @@ pub const _HAS_EXCEPTIONS: u32 = 1;
 pub const _STL_LANG: u32 = 0;
 pub const _HAS_CXX17: u32 = 0;
 pub const _HAS_CXX20: u32 = 0;
+pub const _HAS_CXX23: u32 = 0;
 pub const _HAS_NODISCARD: u32 = 0;
 pub const WCHAR_MIN: u32 = 0;
 pub const WCHAR_MAX: u32 = 65535;
