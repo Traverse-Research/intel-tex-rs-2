@@ -1,11 +1,11 @@
 [package]
-name = "intel_tex"
-version = "0.1.4"
-authors = ["Graham Wihlidal <graham@wihlidal.ca>"]
+name = "intel_tex_2"
+version = "0.1.0"
+authors = ["Traverse Research <opensource@traverseresearch.nl>", "Graham Wihlidal <graham@wihlidal.ca>"]
 description = "Rust bindings for Intel's ISPC texture compressor."
-homepage = "https://github.com/gwihlidal/intel-tex-rs"
-repository = "https://github.com/gwihlidal/intel-tex-rs"
-documentation = "https://docs.rs/intel_tex"
+homepage = "https://github.com/Traverse-Research/intel-tex-rs-2"
+repository = "https://github.com/Traverse-Research/intel-tex-rs-2"
+documentation = "https://docs.rs/intel_tex_2"
 readme = "README.md"
 keywords = ["texture", "image", "compress", "intel", "ispc"]
 categories = ["rendering", "rendering::engine", ]
@@ -30,10 +30,9 @@ include = [
     "build.rs",
     "Cargo.toml",
 ]
-edition = "2018"
+edition = "2021"
 
 [badges]
-travis-ci = { repository = "gwihlidal/intel-tex-rs" }
 maintenance = { status = "actively-developed" }
 
 [dependencies]
@@ -41,10 +40,11 @@ ispc_rt = "1.0.7"
 
 [build-dependencies]
 ispc_compile = { version = "1.0.4", optional = true }
+cc = { version = "1", optional = true }
 ispc_rt = "1.0.7"
 
 [features]
-ispc = ["ispc_compile"]
+ispc = ["ispc_compile", "cc"]
 
 [dev-dependencies]
 ddsfile = "0.5.0"
@@ -54,6 +54,3 @@ image = "0.24.1"
 lto = true
 opt-level = 3
 codegen-units = 1
-
-[patch.crates-io]
-ispc_rt = { git = "https://github.com/Traverse-Research/ispc-rs.git", rev = "0d00819" }

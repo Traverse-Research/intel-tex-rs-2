@@ -52,6 +52,11 @@ jobs:
           name: libkernel_astcx86_64-unknown-linux-gnu.a
           path: src/ispc/libkernel_astcx86_64-unknown-linux-gnu.a
 
+      - uses: actions/upload-artifact@v2
+        with: 
+          name: libispc_texcomp_astcx86_64-unknown-linux-gnu.a
+          path: src/ispc/libispc_texcomp_astcx86_64-unknown-linux-gnu.a
+
   build-macos: 
     runs-on: macos-latest
 
@@ -77,6 +82,11 @@ jobs:
         with: 
           name: libkernel_astcx86_64-apple-darwin.a
           path: src/ispc/libkernel_astcx86_64-apple-darwin.a
+
+      - uses: actions/upload-artifact@v2
+        with: 
+          name: libispc_texcomp_astcx86_64-apple-darwin.a
+          path: src/ispc/libispc_texcomp_astcx86_64-apple-darwin.a
 
       # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
       # tar -xf ispc_linux.tar.gz -C ispc/
