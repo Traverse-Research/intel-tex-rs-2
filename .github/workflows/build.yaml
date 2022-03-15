@@ -1,13 +1,8 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push: 
-    branches: '**'
-
+  push:
+  pull_request:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -29,20 +24,13 @@ jobs:
 
         run: |
           git submodule update --init
-          cd vendor/
-          cd ../
-          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv ispc-v1.17.0-linux/bin/ispc
-          cd ispc-v1.17.0-linux/bin
-          mv ispc ../../
-          cd ../../
+          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv --strip-components=2 ispc-v1.17.0-linux/bin/ispc
 
       - name: Build binaries
         
         run: | 
           PATH=$PATH:$PWD
           cargo build --features=ispc
-          cd src/ispc
-          ls
 
       - uses: actions/upload-artifact@v2
         with: 
@@ -53,7 +41,6 @@ jobs:
         with: 
           name: kernel_astc.rs
           path: src/ispc/kernel_astc.rs
-
 
       - uses: actions/upload-artifact@v2
         with: 
@@ -74,20 +61,12 @@ jobs:
       - name: Prepare Environment
         run: |
           git submodule update --init
-          cd vendor/
-          cd ../
-          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-macOS.tar.gz | tar xzv ispc-v1.17.0-macOS/bin/ispc
-          cd ispc-v1.17.0-macOS/bin
-          mv ispc ../../
-          cd ../../
-          ls
+          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-macOS.tar.gz | tar xzv --strip-components=2 ispc-v1.17.0-macOS/bin/ispc
 
       - name: Build binaries        
         run: | 
           PATH=$PATH:$PWD
           cargo build --features=ispc
-          cd src/ispc
-          ls
 
       - uses: actions/upload-artifact@v2
         with: 
