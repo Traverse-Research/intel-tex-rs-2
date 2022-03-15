@@ -1,10 +1,7 @@
 name: CI
 
-on:
-  push:
-  pull_request:
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+# Allows you to run this workflow manually from the Actions tab
+on: [push, pull_request]
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -19,43 +16,11 @@ jobs:
         # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access igitt
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Prepare Environment
-
-        run: |
-          git submodule update --init
-          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv --strip-components=2 ispc-v1.17.0-linux/bin/ispc
-
-      - name: Build binaries
-        
-        run: | 
-          PATH=$PATH:$PWD
-          cargo build --features=ispc
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: kernel.rs
-          path: src/ispc/kernel.rs
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: kernel_astc.rs
-          path: src/ispc/kernel_astc.rs
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libkernelx86_64-unknown-linux-gnu.a
-          path: src/ispc/libkernelx86_64-unknown-linux-gnu.a
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libkernel_astcx86_64-unknown-linux-gnu.a
-          path: src/ispc/libkernel_astcx86_64-unknown-linux-gnu.a
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libispc_texcomp_astcx86_64-unknown-linux-gnu.a
-          path: src/ispc/libispc_texcomp_astcx86_64-unknown-linux-gnu.a
+      - name: Cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --workspace --all-targets
 
   build-macos: 
     runs-on: macos-latest
@@ -63,35 +28,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Prepare Environment
-        run: |
-          git submodule update --init
-          curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-macOS.tar.gz | tar xzv --strip-components=2 ispc-v1.17.0-macOS/bin/ispc
+      - name: Cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --workspace --all-targets
 
-      - name: Build binaries        
-        run: | 
-          PATH=$PATH:$PWD
-          cargo build --features=ispc
+  build-windows: 
+    runs-on: windows-latest
 
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libkernelx86_64-apple-darwin.a
-          path: src/ispc/libkernelx86_64-apple-darwin.a
+    steps:
+      - uses: actions/checkout@v2
 
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libkernel_astcx86_64-apple-darwin.a
-          path: src/ispc/libkernel_astcx86_64-apple-darwin.a
-
-      - uses: actions/upload-artifact@v2
-        with: 
-          name: libispc_texcomp_astcx86_64-apple-darwin.a
-          path: src/ispc/libispc_texcomp_astcx86_64-apple-darwin.a
-
-      # curl -L  https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz
-      # tar -xf ispc_linux.tar.gz -C ispc/
-      # Runs a set of commands using the runners shell
-      #- name: Run a multi-line script
-      #  run: |
-      #    echo Add other actions to build,
-      #    echo test, and deploy your project.
+      - name: Cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --workspace --all-targets
