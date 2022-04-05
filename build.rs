@@ -62,14 +62,17 @@ fn compile_kernel() {
         .compile("kernel_astc");
 
     // ASTC encoder `extern "C"`'s some code, so we need to make sure to link
-    // and compile that in.
+    // and compile that in. The relevant codepath using this functionality is
+    // completely commented out and only results in linker errors on MSVC which
+    // is unable to deadstrip it and the requirement for a single symbol.
     let out_dir = std::env::var("OUT_DIR").unwrap();
 
     cc::Build::new()
         .include(out_dir)
         .file("vendor/ispc_texcomp/ispc_texcomp_astc.cpp")
         .out_dir("src/ispc")
-        // format the output name such that ispc_rt::PackagedModule can just pick it up easily
+        // Append the target triple since we'll be checking this file in, just like
+        // the compiled kernels above.
         .compile(&format!(
             "ispc_texcomp_astc{}",
             std::env::var("TARGET").unwrap()
@@ -78,6 +81,8 @@ fn compile_kernel() {
 
 #[cfg(not(feature = "ispc"))]
 fn compile_kernel() {
+    use std::path::Path;
+
     ispc_rt::PackagedModule::new("kernel")
         .lib_path("src/ispc")
         .link();
@@ -86,10 +91,19 @@ fn compile_kernel() {
         .lib_path("src/ispc")
         .link();
 
-    // slightly re-use the PackagedModule logic here since it's just linking in libs
-    ispc_rt::PackagedModule::new("ispc_texcomp_astc")
-        .lib_path("src/ispc")
-        .link();
+    // Manually link ispc_texcomp_astc since it's not an ISPC module but C++.
+
+    let libname = format!("ispc_texcomp_astc{}", std::env::var("TARGET").unwrap());
+    let libpath = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/ispc");
+    let libfile = match std::env::var("CARGO_CFG_TARGET_FAMILY").unwrap().as_str() {
+        "unix" => format!("lib{}.a", libname),
+        "windows" => format!("lib{}.a", libname),
+        x => panic!("Unknown target family {}", x),
+    };
+
+    println!("cargo:rustc-link-lib=static={}", libname);
+    println!("cargo:rerun-if-changed={}", libpath.join(libfile).display());
+    println!("cargo:rustc-link-search=native={}", libpath.display());
 }
 
 fn main() {
