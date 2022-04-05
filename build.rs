@@ -1,19 +1,17 @@
 extern crate ispc_rt;
 
 #[cfg(feature = "ispc")]
-
 /*
 ISPC project file builds the kernels as such:
 <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ispc -O2 "%(Filename).ispc" -o "$(TargetDir)%(Filename).obj" -h "$(ProjectDir)%(Filename)_ispc.h" --target=sse2,sse4,avx,avx2 --opt=fast-math</Command>
 <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(TargetDir)%(Filename).obj;$(TargetDir)%(Filename)_sse2.obj;$(TargetDir)%(Filename)_sse4.obj;$(TargetDir)%(Filename)_avx.obj;$(TargetDir)%(Filename)_avx2.obj;</Outputs>
 */
-
 #[cfg(feature = "ispc")]
 use ispc_compile::{TargetISA, TargetOS};
 
 #[cfg(feature = "ispc")]
 #[cfg(target_os = "linux")]
-fn get_target_os() -> TargetOS  {
+fn get_target_os() -> TargetOS {
     TargetOS::Linux
 }
 
@@ -31,7 +29,6 @@ fn get_target_os() -> TargetOS {
 
 #[cfg(feature = "ispc")]
 fn compile_kernel() {
-
     ispc_compile::Config::new()
         .file("vendor/ispc_texcomp/kernel.ispc")
         .opt_level(2)
@@ -73,8 +70,10 @@ fn compile_kernel() {
         .file("vendor/ispc_texcomp/ispc_texcomp_astc.cpp")
         .out_dir("src/ispc")
         // format the output name such that ispc_rt::PackagedModule can just pick it up easily
-        .compile(&format!("ispc_texcomp_astc{}", std::env::var("TARGET").unwrap()));
-
+        .compile(&format!(
+            "ispc_texcomp_astc{}",
+            std::env::var("TARGET").unwrap()
+        ));
 }
 
 #[cfg(not(feature = "ispc"))]
