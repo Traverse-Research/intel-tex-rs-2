@@ -7,12 +7,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Prepare Environment
 
         run: |
-          git submodule update --init
           curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv --strip-components=2 ispc-v1.17.0-linux/bin/ispc
 
       - name: Build binaries
@@ -50,11 +51,12 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
 
       - name: Prepare Environment
         run: |
-          git submodule update --init
           curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-macOS.tar.gz | tar xzv --strip-components=2 ispc-v1.17.0-macOS/bin/ispc
 
       - name: Build binaries
