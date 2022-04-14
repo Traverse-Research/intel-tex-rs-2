@@ -18,8 +18,8 @@ fn main() {
     let mut rgba_img = ImageBuffer::new(width, height);
 
     println!("Converting RGB -> RGBA"); // could be optimized
-    for x in (0_u32..width).into_iter() {
-        for y in (0_u32..height).into_iter() {
+    for x in 0u32..width {
+        for y in 0u32..height {
             let pixel = rgb_img.get_pixel(x, y);
             let pixel_rgba = pixel.to_rgba();
             rgba_img.put_pixel(x, y, pixel_rgba);
@@ -62,7 +62,7 @@ fn main() {
     bc7::compress_blocks_into(
         &bc7::opaque_ultra_fast_settings(),
         &surface,
-        &mut dds.get_mut_data(0 /* layer */).unwrap(),
+        dds.get_mut_data(0 /* layer */).unwrap(),
     );
     println!("  Done!");
 

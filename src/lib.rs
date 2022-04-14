@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate ispc_rt;
 
+#[allow(deref_nullptr)]
 pub mod bindings {
     ispc_module!(kernel);
     ispc_module!(kernel_astc);
