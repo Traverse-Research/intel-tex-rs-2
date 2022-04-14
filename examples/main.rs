@@ -37,20 +37,18 @@ fn main() {
     let alpha_mode = AlphaMode::Opaque;
     let depth = 1;
 
-    let mut dds = Dds::new_dxgi(
-        NewDxgiParams {
-            height,
-            width,
-            depth: Some(depth),
-            format: DxgiFormat::BC7_UNorm,
-            mipmap_levels: Some(mip_count),
-            array_layers: Some(array_layers),
-            caps2: Some(caps2),
-            is_cubemap,
-            resource_dimension,
-            alpha_mode,
-        }
-    )
+    let mut dds = Dds::new_dxgi(NewDxgiParams {
+        height,
+        width,
+        depth: Some(depth),
+        format: DxgiFormat::BC7_UNorm,
+        mipmap_levels: Some(mip_count),
+        array_layers: Some(array_layers),
+        caps2: Some(caps2),
+        is_cubemap,
+        resource_dimension,
+        alpha_mode,
+    })
     .unwrap();
 
     let surface = intel_tex_2::RgbaSurface {
