@@ -13,9 +13,7 @@ license = "MIT/Apache-2.0"
 build = "build.rs"
 include = [
     "/src/",
-    "/Cargo.toml",
-    "/LICENSE-APACHE",
-    "/LICENSE-MIT",
+    "/LICENSE-*",
     "/build.rs",
 ]
 edition = "2021"

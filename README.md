@@ -21,7 +21,9 @@ State of the art texture compression for BC6H, BC7, ETC1, ASTC and BC1/BC3.
 
 ISPC and `libclang` are not required, unless regenerating the ISPC kernels:
 
-```cargo build --features=ispc```
+```console
+$cargo build --features=ispc
+```
 
 * ISPC compiler:
   * https://ispc.github.io/
@@ -56,7 +58,7 @@ intel_tex_2 = "0.1.0"
 
 ## Example
 
-```shell
+```console
 $ cargo run --release --example main
 
 Width is 4096
