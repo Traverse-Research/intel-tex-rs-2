@@ -56,7 +56,7 @@ fn main() {
     let surface = intel_tex_2::RgbaSurface {
         width,
         height,
-        stride: width * 4,
+        stride_in_bytes: width * 4,
         data: &rgba_img,
     };
 

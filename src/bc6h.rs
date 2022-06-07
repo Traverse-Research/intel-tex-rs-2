@@ -32,7 +32,7 @@ pub fn compress_blocks_into(settings: &EncodeSettings, surface: &RgbaSurface, bl
     let mut surface = kernel::rgba_surface {
         width: surface.width as i32,
         height: surface.height as i32,
-        stride: surface.stride as i32,
+        stride: surface.stride_in_bytes as i32,
         ptr: surface.data.as_ptr() as *mut u8,
     };
     let mut settings = kernel::bc6h_enc_settings {
