@@ -18,7 +18,7 @@ pub mod etc1;
 pub struct RgbaSurface<'a> {
     /// The pixel data for the image.
     /// The data does not need to be tightly packed, but if it isn't, stride must be different from `width * 4`.
-    /// 
+    ///
     /// Expected to be at least `stride * height`.
     pub data: &'a [u8],
     /// The width of the image in texels.
