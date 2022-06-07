@@ -25,7 +25,7 @@ pub struct RgbaSurface<'a> {
     pub width: u32,
     /// The height of the image in texels.
     pub height: u32,
-    /// The stride between the rows of pixels, in bytes.
+    /// The stride between the rows of the image, in bytes.
     /// If `data` is tightly packed, this is expected to be `width * 4`.
     pub stride: u32,
 }
