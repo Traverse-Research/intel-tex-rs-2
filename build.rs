@@ -1,5 +1,3 @@
-extern crate ispc_rt;
-
 /*
 ISPC project file builds the kernels as such:
 <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ispc -O2 "%(Filename).ispc" -o "$(TargetDir)%(Filename).obj" -h "$(ProjectDir)%(Filename)_ispc.h" --target=sse2,sse4,avx,avx2 --opt=fast-math</Command>
@@ -8,9 +6,9 @@ ISPC project file builds the kernels as such:
 
 #[cfg(feature = "ispc")]
 fn compile_kernel() {
-    use ispc_compile::TargetISA;
+    use ispc_compile::{BindgenOptions, Config, TargetISA};
 
-    ispc_compile::Config::new()
+    Config::new()
         .file("vendor/ispc_texcomp/kernel.ispc")
         .opt_level(2)
         .woff()
@@ -22,10 +20,21 @@ fn compile_kernel() {
             TargetISA::AVX512KNLi32x16,
             TargetISA::AVX512SKXi32x16,
         ])
+        .bindgen_options(BindgenOptions {
+            allowlist_functions: vec![
+                "CompressBlocksBC1_ispc".into(),
+                "CompressBlocksBC3_ispc".into(),
+                "CompressBlocksBC4_ispc".into(),
+                "CompressBlocksBC5_ispc".into(),
+                "CompressBlocksBC7_ispc".into(),
+                "CompressBlocksBC6H_ispc".into(),
+                "CompressBlocksETC1_ispc".into(),
+            ],
+        })
         .out_dir("src/ispc")
         .compile("kernel");
 
-    ispc_compile::Config::new()
+    Config::new()
         .file("vendor/ispc_texcomp/kernel_astc.ispc")
         .opt_level(2)
         .woff()
@@ -37,6 +46,13 @@ fn compile_kernel() {
             TargetISA::AVX512KNLi32x16,
             TargetISA::AVX512SKXi32x16,
         ])
+        .bindgen_options(BindgenOptions {
+            allowlist_functions: vec![
+                "astc_rank_ispc".into(),
+                "astc_encode_ispc".into(),
+                "get_programCount".into(),
+            ],
+        })
         .out_dir("src/ispc")
         .compile("kernel_astc");
 
