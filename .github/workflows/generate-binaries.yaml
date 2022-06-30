@@ -1,4 +1,4 @@
-name: Generate Linux and macOS binaries
+name: Generate binaries
 
 on: [workflow_dispatch]
 
@@ -12,17 +12,15 @@ jobs:
           submodules: true
 
       - name: Prepare Environment
-
         run: |
           curl -L https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-linux.tar.gz | tar xzv --strip-components=2 ispc-v1.17.0-linux/bin/ispc
 
       - name: Build binaries
-
         run: |
           PATH=$PATH:$PWD
           cargo build --features=ispc
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: Ubuntu ISPC kernels
           path: |
@@ -47,9 +45,36 @@ jobs:
           PATH=$PATH:$PWD
           cargo build --features=ispc
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: MacOS ISPC kernels
           path: |
             src/ispc/libkernel{,_astc}x86_64-apple-darwin.a
             src/ispc/libispc_texcomp_astcx86_64-apple-darwin.a
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Clean old artifacts before upload globbing
+        run: Remove-Item src/ispc/*.lib
+
+      - name: Prepare Environment
+        run: |
+          curl -OL https://github.com/ispc/ispc/releases/download/v1.17.0/ispc-v1.17.0-windows.zip
+          unzip ispc-v1.17.0-windows.zip ispc-v1.17.0-windows/bin/ispc.exe
+          rm ispc-v1.17.0-windows.zip
+          Resolve-Path "ispc-v1.17.0-windows/bin" | Add-Content $env:GITHUB_PATH
+
+      - name: Build binaries
+        run: cargo build --features=ispc
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Windows ISPC kernels
+          path: |
+            src/ispc/*.lib
