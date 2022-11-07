@@ -29,8 +29,10 @@ jobs:
         with:
           name: ISPC kernels
           path: |
-            src/ispc/kernel{,_astc}.rs
-            src/ispc/libkernel{,_astc}x86_64-unknown-linux-gnu.a
+            src/ispc/kernel.rs
+            src/ispc/kernel_astc.rs
+            src/ispc/libkernelx86_64-unknown-linux-gnu.a
+            src/ispc/libkernel_astcx86_64-unknown-linux-gnu.a
             src/ispc/libispc_texcomp_astcx86_64-unknown-linux-gnu.a
 
   build-macos:
@@ -56,7 +58,8 @@ jobs:
         with:
           name: ISPC kernels
           path: |
-            src/ispc/libkernel{,_astc}x86_64-apple-darwin.a
+            src/ispc/libkernelx86_64-apple-darwin.a
+            src/ispc/libkernel_astcx86_64-apple-darwin.a
             src/ispc/libispc_texcomp_astcx86_64-apple-darwin.a
 
   build-windows:
