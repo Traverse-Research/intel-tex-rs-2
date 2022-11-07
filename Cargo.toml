@@ -22,12 +22,12 @@ edition = "2021"
 maintenance = { status = "actively-developed" }
 
 [dependencies]
-ispc_rt = "1.1"
+ispc_rt = "2.0"
 
 [build-dependencies]
 ispc_compile = { version = "1.1", optional = true }
 cc = { version = "1", optional = true }
-ispc_rt = "1.1"
+ispc_rt = "2.0"
 
 [features]
 ispc = ["ispc_compile", "cc"]
