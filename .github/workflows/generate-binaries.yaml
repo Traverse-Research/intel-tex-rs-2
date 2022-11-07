@@ -14,6 +14,9 @@ jobs:
         with:
           submodules: true
 
+      - name: Clean old artifacts
+        run: rm src/ispc/kernel{,_astc}.rs src/ispc/lib*.a
+
       - name: Prepare Environment
         run: |
           curl -L https://github.com/ispc/ispc/releases/download/v$ISPC_VERSION/ispc-v$ISPC_VERSION-linux.tar.gz | tar xzv --strip-components=2 ispc-v$ISPC_VERSION-linux/bin/ispc
@@ -38,6 +41,9 @@ jobs:
         with:
           submodules: true
 
+      - name: Clean old artifacts
+        run: rm src/ispc/*.a
+
       - name: Prepare Environment
         run: |
           curl -L https://github.com/ispc/ispc/releases/download/v$ISPC_VERSION/ispc-v$ISPC_VERSION-macOS.tar.gz | tar xzv --strip-components=2 ispc-v$ISPC_VERSION-macOS/bin/ispc
@@ -61,7 +67,7 @@ jobs:
         with:
           submodules: true
 
-      - name: Clean old artifacts before upload globbing
+      - name: Clean old artifacts
         run: Remove-Item src/ispc/*.lib
 
       - name: Prepare Environment
