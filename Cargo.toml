@@ -25,7 +25,7 @@ maintenance = { status = "actively-developed" }
 ispc_rt = "1.1"
 
 [build-dependencies]
-ispc_compile = { version = "1.1", optional = true }
+ispc_compile = { version = "2.0", optional = true }
 cc = { version = "1", optional = true }
 ispc_rt = "1.1"
 
