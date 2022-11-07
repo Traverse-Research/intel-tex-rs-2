@@ -23,12 +23,12 @@ pub fn compress_blocks_into(surface: &RgbaSurface, blocks: &mut [u8]) {
 
     let mut r_data = vec![0_u8; (surface.width * surface.height) as usize];
     let pitch = (surface.width * 32 + 7) / 8;
-    let mut offset = 0_u32;
+    let mut offset = 0;
 
     for y in 0..surface.height {
         for x in 0..surface.width {
             // Copy R byte over
-            r_data[offset as usize] = surface.data[(x * 4 + y * pitch) as usize];
+            r_data[offset] = surface.data[(x * 4 + y * pitch) as usize];
             offset += 1;
         }
     }
