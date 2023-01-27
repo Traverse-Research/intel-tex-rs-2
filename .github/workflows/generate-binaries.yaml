@@ -22,8 +22,36 @@ jobs:
           curl -L https://github.com/ispc/ispc/releases/download/v$ISPC_VERSION/ispc-v$ISPC_VERSION-linux.tar.gz | tar xzv --strip-components=2 ispc-v$ISPC_VERSION-linux/bin/ispc
           echo "$PWD" >> $GITHUB_PATH
 
+      - name: Install additional targets
+        run: rustup target add aarch64-unknown-linux-gnu aarch64-linux-android
+
+      - name: Install GCC aarch64 compiler
+        run: |
+          sudo apt update
+          # 11 to match gnu compiler under the hood (https://bugs.launchpad.net/ubuntu/+source/gcc-4.8-powerpc-cross/+bug/1311711/comments/4)
+          sudo apt install gcc-11-multilib gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
       - name: Build binaries
-        run: cargo build --features=ispc
+        run: |
+          cargo build --features=ispc --target x86_64-unknown-linux-gnu
+          cargo build --features=ispc --target aarch64-unknown-linux-gnu
+
+      - name: Make NDK compiler available
+        run: |
+          TOOLCHAIN=$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/
+          echo "CC_aarch64-linux-android=$TOOLCHAIN/clang" >> $GITHUB_ENV
+          echo "CXX_aarch64-linux-android=$TOOLCHAIN/clang++" >> $GITHUB_ENV
+          echo "CARGO_aarch64_linux_android_LINKER=$TOOLCHAIN/clang" >> $GITHUB_ENV
+          echo "CARGO_aarch64_linux_android_AR=$TOOLCHAIN/llvm-ar" >> $GITHUB_ENV
+          echo "AR_aarch64-linux-android=$TOOLCHAIN/llvm-ar" >> $GITHUB_ENV
+
+          # TODO: Add --target to RUSTFLAGS via -Clink-arg on android-specific build?
+          echo "CFLAGS_aarch64-linux-android=--target=aarch64-linux-android33" >> $GITHUB_ENV
+          echo "CXXFLAGS_aarch64-linux-android=--target=aarch64-linux-android33" >> $GITHUB_ENV
+          echo "RUSTFLAGS=-Clink-arg=--target=aarch64-linux-android33" >> $GITHUB_ENV
+
+      - name: Build binaries (Android)
+        run: cargo build --features=ispc --target aarch64-linux-android
 
       - uses: actions/upload-artifact@v3
         with:
@@ -31,9 +59,7 @@ jobs:
           path: |
             src/ispc/kernel.rs
             src/ispc/kernel_astc.rs
-            src/ispc/libkernelx86_64-unknown-linux-gnu.a
-            src/ispc/libkernel_astcx86_64-unknown-linux-gnu.a
-            src/ispc/libispc_texcomp_astcx86_64-unknown-linux-gnu.a
+            src/ispc/lib*.a
 
   build-macos:
     runs-on: macos-latest
