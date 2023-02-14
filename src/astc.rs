@@ -156,7 +156,7 @@ pub fn compress_blocks_into(settings: &EncodeSettings, surface: &RgbaSurface, bl
     let mode_list_size = 3334usize;
     let list_size = program_count as usize;
 
-    let mut mode_lists: Vec<u64> = vec![0; (list_size * mode_list_size) as usize];
+    let mut mode_lists: Vec<u64> = vec![0; list_size * mode_list_size];
     let mut mode_buffer: Vec<u32> =
         vec![0; (program_count * settings.fast_skip_threshold) as usize];
 
@@ -176,7 +176,7 @@ pub fn compress_blocks_into(settings: &EncodeSettings, surface: &RgbaSurface, bl
     };
 
     for yy in 0..(surface.height / settings.block_height) as u32 {
-        for xx in 0..((tex_width + program_count - 1) / program_count) as u32 {
+        for xx in 0..((tex_width + program_count - 1) / program_count) {
             let xx = xx * program_count;
             astc_rank(&mut settings, &mut surface, xx, yy, &mut mode_buffer);
             for i in 0..settings.fastSkipTreshold as u32 {

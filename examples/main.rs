@@ -8,7 +8,7 @@ use std::path::Path;
 use ddsfile::{AlphaMode, Caps2, D3D10ResourceDimension, Dds, DxgiFormat, NewDxgiParams};
 
 fn main() {
-    let rgb_img = image::open(&Path::new("examples/lambertian.jpg")).unwrap();
+    let rgb_img = image::open(Path::new("examples/lambertian.jpg")).unwrap();
 
     let (width, height) = rgb_img.dimensions();
     println!("Width is {}", width);
