@@ -22,7 +22,7 @@ State of the art texture compression for BC6H, BC7, ETC1, ASTC and BC1/BC3.
 ISPC and `libclang` are not required, unless regenerating the ISPC kernels:
 
 ```console
-$cargo build --features=ispc
+$ cargo build --features=ispc
 ```
 
 * ISPC compiler:

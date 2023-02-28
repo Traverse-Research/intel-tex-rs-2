@@ -6,7 +6,7 @@ ISPC project file builds the kernels as such:
 
 #[cfg(feature = "ispc")]
 fn compile_kernel() {
-    use ispc_compile::{BindgenOptions, Config, TargetISA};
+    use ispc_compile::{bindgen::builder, Config, TargetISA};
 
     Config::new()
         .file("vendor/ispc_texcomp/kernel.ispc")
@@ -20,17 +20,7 @@ fn compile_kernel() {
             TargetISA::AVX512KNLi32x16,
             TargetISA::AVX512SKXi32x16,
         ])
-        .bindgen_options(BindgenOptions {
-            allowlist_functions: vec![
-                "CompressBlocksBC1_ispc".into(),
-                "CompressBlocksBC3_ispc".into(),
-                "CompressBlocksBC4_ispc".into(),
-                "CompressBlocksBC5_ispc".into(),
-                "CompressBlocksBC7_ispc".into(),
-                "CompressBlocksBC6H_ispc".into(),
-                "CompressBlocksETC1_ispc".into(),
-            ],
-        })
+        .bindgen_builder(builder().allowlist_function(r#"CompressBlocks(BC\dH?|ETC1)_ispc"#))
         .out_dir("src/ispc")
         .compile("kernel");
 
@@ -46,13 +36,12 @@ fn compile_kernel() {
             TargetISA::AVX512KNLi32x16,
             TargetISA::AVX512SKXi32x16,
         ])
-        .bindgen_options(BindgenOptions {
-            allowlist_functions: vec![
-                "astc_rank_ispc".into(),
-                "astc_encode_ispc".into(),
-                "get_programCount".into(),
-            ],
-        })
+        .bindgen_builder(
+            builder()
+                .allowlist_function("astc_rank_ispc")
+                .allowlist_function("astc_encode_ispc")
+                .allowlist_function("get_programCount"),
+        )
         .out_dir("src/ispc")
         .compile("kernel_astc");
 

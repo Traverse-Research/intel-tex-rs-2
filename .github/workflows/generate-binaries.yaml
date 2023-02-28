@@ -14,6 +14,9 @@ jobs:
         with:
           submodules: true
 
+      - name: Clean old artifacts
+        run: rm src/ispc/kernel{,_astc}.rs src/ispc/lib*.a
+
       - name: Prepare Environment
         run: |
           curl -L https://github.com/ispc/ispc/releases/download/v$ISPC_VERSION/ispc-v$ISPC_VERSION-linux.tar.gz | tar xzv --strip-components=2 ispc-v$ISPC_VERSION-linux/bin/ispc
@@ -26,8 +29,10 @@ jobs:
         with:
           name: ISPC kernels
           path: |
-            src/ispc/kernel{,_astc}.rs
-            src/ispc/libkernel{,_astc}x86_64-unknown-linux-gnu.a
+            src/ispc/kernel.rs
+            src/ispc/kernel_astc.rs
+            src/ispc/libkernelx86_64-unknown-linux-gnu.a
+            src/ispc/libkernel_astcx86_64-unknown-linux-gnu.a
             src/ispc/libispc_texcomp_astcx86_64-unknown-linux-gnu.a
 
   build-macos:
@@ -37,6 +42,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
+
+      - name: Clean old artifacts
+        run: rm src/ispc/*.a
 
       - name: Prepare Environment
         run: |
@@ -50,7 +58,8 @@ jobs:
         with:
           name: ISPC kernels
           path: |
-            src/ispc/libkernel{,_astc}x86_64-apple-darwin.a
+            src/ispc/libkernelx86_64-apple-darwin.a
+            src/ispc/libkernel_astcx86_64-apple-darwin.a
             src/ispc/libispc_texcomp_astcx86_64-apple-darwin.a
 
   build-windows:
@@ -61,7 +70,7 @@ jobs:
         with:
           submodules: true
 
-      - name: Clean old artifacts before upload globbing
+      - name: Clean old artifacts
         run: Remove-Item src/ispc/*.lib
 
       - name: Prepare Environment
