@@ -38,7 +38,7 @@ pub fn compress_blocks_into(surface: &RgbaSurface, blocks: &mut [u8]) {
         width: surface.width as i32,
         height: surface.height as i32,
         stride: (surface.stride / 2) as i32,
-        ptr: (&rg_data).as_ptr() as *mut u8,
+        ptr: rg_data.as_ptr() as *mut u8,
     };
 
     unsafe {

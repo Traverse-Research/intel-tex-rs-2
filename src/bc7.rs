@@ -57,7 +57,7 @@ pub fn compress_blocks_into(settings: &EncodeSettings, surface: &RgbaSurface, bl
         fastSkipTreshold_mode7: settings.fast_skip_threshold_mode7 as i32,
         mode45_channel0: settings.mode45_channel0 as i32,
         refineIterations_channel: settings.refine_iterations_channel as i32,
-        channels: settings.channels as i32,
+        channels: settings.channels,
     };
 
     unsafe {
