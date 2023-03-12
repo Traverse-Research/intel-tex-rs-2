@@ -77,16 +77,19 @@ jobs:
           curl -L https://github.com/ispc/ispc/releases/download/v$ISPC_VERSION/ispc-v$ISPC_VERSION-macOS.tar.gz | tar xzv --strip-components=2 ispc-v$ISPC_VERSION-macOS/bin/ispc
           echo "$PWD" >> $GITHUB_PATH
 
+      - name: Install additional targets
+        run: rustup target add aarch64-apple-darwin
+
       - name: Build binaries
-        run: cargo build --features=ispc
+        run: |
+          cargo build --features=ispc --target=x86_64-apple-darwin
+          cargo build --features=ispc --target=aarch64-apple-darwin
 
       - uses: actions/upload-artifact@v3
         with:
           name: ISPC kernels
           path: |
-            src/ispc/libkernelx86_64-apple-darwin.a
-            src/ispc/libkernel_astcx86_64-apple-darwin.a
-            src/ispc/libispc_texcomp_astcx86_64-apple-darwin.a
+            src/ispc/lib*.a
 
   build-windows:
     runs-on: windows-latest
