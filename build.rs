@@ -84,7 +84,7 @@ fn compile_kernel() {
     let libpath = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/ispc");
     let libfile = match std::env::var("CARGO_CFG_TARGET_FAMILY").unwrap().as_str() {
         "unix" => format!("lib{}.a", libname),
-        "windows" => format!("lib{}.a", libname),
+        "windows" => format!("{}.lib", libname),
         x => panic!("Unknown target family {}", x),
     };
 
