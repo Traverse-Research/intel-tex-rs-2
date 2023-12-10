@@ -11,8 +11,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: true
+      - name: Checkout submodule
+        # Manually update submodules with --checkout because they are configured with update=none and will be skipped otherwise
+        run: git submodule update --recursive --init --force --checkout
 
       - name: Clean old artifacts
         run: rm src/ispc/kernel{,_astc}.rs src/ispc/lib*.a
@@ -66,8 +67,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: true
+      - name: Checkout submodule
+        # Manually update submodules with --checkout because they are configured with update=none and will be skipped otherwise
+        run: git submodule update --recursive --init --force --checkout
 
       - name: Clean old artifacts
         run: rm src/ispc/*.a
@@ -96,8 +98,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          submodules: true
+      - name: Checkout submodule
+        # Manually update submodules with --checkout because they are configured with update=none and will be skipped otherwise
+        run: git submodule update --recursive --init --force --checkout
 
       - name: Clean old artifacts
         run: Remove-Item src/ispc/*.lib
