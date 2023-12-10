@@ -109,8 +109,13 @@ jobs:
           rm ispc-v$env:ISPC_VERSION-windows.zip
           Resolve-Path "ispc-v$env:ISPC_VERSION-windows/bin" | Add-Content $env:GITHUB_PATH
 
+      - name: Install additional targets
+        run: rustup target add aarch64-pc-windows-msvc
+
       - name: Build binaries
-        run: cargo build --features=ispc
+        run: |
+          cargo build --features=ispc
+          cargo build --features=ispc --target aarch64-pc-windows-msvc
 
       - uses: actions/upload-artifact@v3
         with:

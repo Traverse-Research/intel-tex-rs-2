@@ -40,3 +40,7 @@ image = "0.24.1"
 lto = true
 opt-level = 3
 codegen-units = 1
+
+[patch.crates-io]
+# Includes https://github.com/Twinklebear/ispc-rs/commit/4e33959af030f59b2ab6696095a021ad919005dc
+ispc_compile = { git = "https://github.com/Twinklebear/ispc-rs", rev = "3b5c0b4" }

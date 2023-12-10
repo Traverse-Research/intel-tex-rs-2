@@ -6,5 +6,5 @@ sign-tag = true
 publish = false
 
 pre-release-replacements = [
-  {file="README.md", search="intel_tex_2 = .*", replace="{{crate_name}} = \"{{version}}\""},
+  { file = "README.md", search = "intel_tex_2 = .*", replace = "{{crate_name}} = \"{{version}}\"" },
 ]
