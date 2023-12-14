@@ -3,7 +3,7 @@ name: Generate binaries
 on: [workflow_dispatch]
 
 env:
-  ISPC_VERSION: 1.18.0
+  ISPC_VERSION: 1.20.0
 
 jobs:
   build-linux:
@@ -76,7 +76,7 @@ jobs:
 
       - name: Prepare Environment
         run: |
-          curl -L https://github.com/ispc/ispc/releases/download/v$ISPC_VERSION/ispc-v$ISPC_VERSION-macOS.tar.gz | tar xzv --strip-components=2 ispc-v$ISPC_VERSION-macOS/bin/ispc
+          curl -L https://github.com/ispc/ispc/releases/download/v$ISPC_VERSION/ispc-v$ISPC_VERSION-macOS.x86_64.tar.gz | tar xzv --strip-components=2 ispc-v$ISPC_VERSION-macOS.x86_64/bin/ispc
           echo "$PWD" >> $GITHUB_PATH
 
       - name: Install additional targets
