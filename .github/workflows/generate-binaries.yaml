@@ -54,7 +54,7 @@ jobs:
       - name: Build binaries (Android)
         run: cargo build --features=ispc --target aarch64-linux-android
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ISPC kernels
           path: |
@@ -87,7 +87,7 @@ jobs:
           cargo build --features=ispc --target=x86_64-apple-darwin
           cargo build --features=ispc --target=aarch64-apple-darwin
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ISPC kernels
           path: |
@@ -120,7 +120,7 @@ jobs:
           cargo build --features=ispc
           cargo build --features=ispc --target aarch64-pc-windows-msvc
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ISPC kernels
           path: |
