@@ -1,5 +1,5 @@
 use crate::bindings::kernel;
-use crate::RgbaSurface;
+use crate::RSurface;
 
 #[inline(always)]
 pub fn calc_output_size(width: u32, height: u32) -> usize {
@@ -8,36 +8,24 @@ pub fn calc_output_size(width: u32, height: u32) -> usize {
     block_count * 8
 }
 
-pub fn compress_blocks(surface: &RgbaSurface) -> Vec<u8> {
+pub fn compress_blocks(surface: &RSurface) -> Vec<u8> {
     let output_size = calc_output_size(surface.width, surface.height);
     let mut output = vec![0u8; output_size];
     compress_blocks_into(surface, &mut output);
     output
 }
 
-pub fn compress_blocks_into(surface: &RgbaSurface, blocks: &mut [u8]) {
+pub fn compress_blocks_into(surface: &RSurface, blocks: &mut [u8]) {
     assert_eq!(
         blocks.len(),
         calc_output_size(surface.width, surface.height)
     );
 
-    let mut r_data = vec![0_u8; (surface.width * surface.height) as usize];
-    let pitch = (surface.width * 32 + 7) / 8;
-    let mut offset = 0;
-
-    for y in 0..surface.height {
-        for x in 0..surface.width {
-            // Copy R byte over
-            r_data[offset] = surface.data[(x * 4 + y * pitch) as usize];
-            offset += 1;
-        }
-    }
-
     let mut surface = kernel::rgba_surface {
         width: surface.width as i32,
         height: surface.height as i32,
-        stride: (surface.stride / 4) as i32,
-        ptr: r_data.as_ptr() as *mut u8,
+        stride: surface.stride as i32,
+        ptr: surface.data.as_ptr() as *mut u8,
     };
 
     unsafe {

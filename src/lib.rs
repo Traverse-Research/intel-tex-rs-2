@@ -16,7 +16,7 @@ pub mod etc1;
 
 /// Describes a 2D image to block-compress.
 #[derive(Debug, Copy, Clone)]
-pub struct RgbaSurface<'a> {
+pub struct Surface<'a, const COMPONENTS: usize> {
     /// The pixel data for the image.
     /// The data does not need to be tightly packed, but if it isn't, stride must be different from `width * 4`.
     ///
@@ -30,6 +30,10 @@ pub struct RgbaSurface<'a> {
     /// If `data` is tightly packed, this is expected to be `width * 4`.
     pub stride: u32,
 }
+
+pub type RgbaSurface<'a> = Surface<'a, 4>;
+pub type RgSurface<'a> = Surface<'a, 2>;
+pub type RSurface<'a> = Surface<'a, 1>;
 
 #[inline(always)]
 pub fn divide_up_by_multiple(val: u32, align: u32) -> u32 {
