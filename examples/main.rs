@@ -42,7 +42,7 @@ fn main() {
         height,
         width,
         depth: Some(1),
-        format: DxgiFormat::BC7_UNorm,
+        format: DxgiFormat::Unknown,
         mipmap_levels: Some(1),
         array_layers: Some(1),
         caps2: Some(Caps2::empty()),
@@ -52,18 +52,27 @@ fn main() {
     };
     // BC4
     {
-        let surface = intel_tex_2::RSurface {
-            width,
-            height,
-            stride: width,
-            data: &r_img,
-        };
-
         let mut dds = Dds::new_dxgi(NewDxgiParams {
             format: DxgiFormat::BC4_UNorm,
             ..dds_defaults
         })
         .unwrap();
+
+        let stride = width;
+        assert_eq!(
+            dds.get_pitch(),
+            Some(stride * 2), //the output is 2 bytes per pixel
+            "dds stride ({:?}) did not match the provided surface stride ({})",
+            dds.get_pitch(),
+            stride * 2
+        );
+
+        let surface = intel_tex_2::RSurface {
+            width,
+            height,
+            stride,
+            data: &r_img,
+        };
 
         println!("Compressing to BC4...");
         bc4::compress_blocks_into(&surface, dds.get_mut_data(0 /* layer */).unwrap());
@@ -74,18 +83,26 @@ fn main() {
     }
     // BC5
     {
-        let surface = intel_tex_2::RgSurface {
-            width,
-            height,
-            stride: width * 2,
-            data: &rg_img,
-        };
-
         let mut dds = Dds::new_dxgi(NewDxgiParams {
             format: DxgiFormat::BC5_UNorm,
             ..dds_defaults
         })
         .unwrap();
+
+        let stride = width * 2;
+        assert_eq!(
+            dds.get_pitch(),
+            Some(stride * 2), //the output is 2 bytes per pixel
+            "dds stride ({:?}) did not match the provided surface stride ({})",
+            dds.get_pitch(),
+            stride * 2
+        );
+        let surface = intel_tex_2::RgSurface {
+            width,
+            height,
+            stride,
+            data: &rg_img,
+        };
 
         println!("Compressing to BC5...");
         bc5::compress_blocks_into(&surface, dds.get_mut_data(0 /* layer */).unwrap());
@@ -96,18 +113,25 @@ fn main() {
     }
     // BC7
     {
-        let surface = intel_tex_2::RgbaSurface {
-            width,
-            height,
-            stride: width * 4,
-            data: &rgba_img,
-        };
-
         let mut dds = Dds::new_dxgi(NewDxgiParams {
             format: DxgiFormat::BC7_UNorm,
             ..dds_defaults
         })
         .unwrap();
+        let stride = width * 4;
+        assert_eq!(
+            dds.get_pitch(),
+            Some(stride), //the output is 1 byte per pixel
+            "dds stride ({:?}) did not match the provided surface stride ({})",
+            dds.get_pitch(),
+            stride
+        );
+        let surface = intel_tex_2::RgbaSurface {
+            width,
+            height,
+            stride,
+            data: &rgba_img,
+        };
 
         println!("Compressing to BC7...");
         bc7::compress_blocks_into(
