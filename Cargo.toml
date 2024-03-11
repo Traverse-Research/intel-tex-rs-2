@@ -34,7 +34,7 @@ ispc = ["ispc_compile", "cc"]
 
 [dev-dependencies]
 ddsfile = "0.5.0"
-image = "0.24.1"
+image = "0.25.0"
 
 [profile.release]
 lto = true
