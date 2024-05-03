@@ -5,6 +5,7 @@ use image::LumaA;
 use image::Pixel;
 use intel_tex_2::bc4;
 use intel_tex_2::bc5;
+use intel_tex_2::bc6h;
 use intel_tex_2::bc7;
 use std::fs::File;
 use std::path::Path;
@@ -91,6 +92,35 @@ fn main() {
         println!("  Done!");
         println!("Saving lambertian_bc5.dds file");
         let mut dds_file = File::create("examples/lambertian_bc5.dds").unwrap();
+        dds.write(&mut dds_file).expect("Failed to write dds file");
+    }
+    // BC6
+    {
+        let mut dds = Dds::new_dxgi(NewDxgiParams {
+            format: DxgiFormat::BC6H_UF16,
+            ..dds_defaults
+        })
+        .unwrap();
+        let rgba_f16_data: Vec<u8> = rgba_img
+            .iter()
+            .flat_map(|c| half::f16::from_f32(*c as f32 / 255.0).to_le_bytes())
+            .collect();
+        let surface = intel_tex_2::RgbaSurface {
+            width,
+            height,
+            stride: width * 4 * std::mem::size_of::<half::f16>() as u32,
+            data: &rgba_f16_data,
+        };
+
+        println!("Compressing to BC6...");
+        bc6h::compress_blocks_into(
+            &bc6h::very_fast_settings(),
+            &surface,
+            dds.get_mut_data(0 /* layer */).unwrap(),
+        );
+        println!("  Done!");
+        println!("Saving lambertian_bc6.dds file");
+        let mut dds_file = File::create("examples/lambertian_bc6.dds").unwrap();
         dds.write(&mut dds_file).expect("Failed to write dds file");
     }
     // BC7
