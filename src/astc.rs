@@ -151,7 +151,7 @@ pub fn compress_blocks_into(settings: &EncodeSettings, surface: &RgbaSurface, bl
     let program_count = unsafe { kernel_astc::get_programCount() as u32 };
 
     let mut block_scores =
-        vec![std::f32::INFINITY; (tex_width * surface.height / settings.block_height) as usize];
+        vec![f32::INFINITY; (tex_width * surface.height / settings.block_height) as usize];
 
     let mode_list_size = 3334usize;
     let list_size = program_count as usize;
