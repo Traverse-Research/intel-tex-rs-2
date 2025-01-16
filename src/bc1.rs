@@ -20,6 +20,8 @@ pub fn compress_blocks_into(surface: &RgbaSurface, blocks: &mut [u8]) {
         blocks.len(),
         calc_output_size(surface.width, surface.height)
     );
+    assert!(surface.data.len() >= surface.height as usize * surface.stride as usize);
+
     let mut surface = kernel::rgba_surface {
         width: surface.width as i32,
         height: surface.height as i32,
