@@ -56,7 +56,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ISPC kernels
+          name: ISPC kernels Linux
           path: |
             src/ispc/kernel.rs
             src/ispc/kernel_astc.rs
@@ -80,16 +80,17 @@ jobs:
           echo "$PWD" >> $GITHUB_PATH
 
       - name: Install additional targets
-        run: rustup target add aarch64-apple-darwin
+        run: rustup target add x86_64-apple-darwin aarch64-apple-darwin aarch64-apple-ios
 
       - name: Build binaries
         run: |
           cargo build --features=ispc --target=x86_64-apple-darwin
           cargo build --features=ispc --target=aarch64-apple-darwin
+          cargo build --features=ispc --target=aarch64-apple-ios
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ISPC kernels
+          name: ISPC kernels Apple
           path: |
             src/ispc/lib*.a
 
@@ -122,6 +123,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ISPC kernels
+          name: ISPC kernels Windows
           path: |
             src/ispc/*.lib
