@@ -1,9 +1,9 @@
 name: Generate binaries
 
-on: [workflow_dispatch]
+on: [workflow_dispatch, push]
 
 env:
-  ISPC_VERSION: 1.20.0
+  ISPC_VERSION: 1.27.0
 
 jobs:
   build-linux:
