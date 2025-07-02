@@ -53,7 +53,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-intel_tex_2 = "0.4.0"
+intel_tex_2 = "0.5.0"
 ```
 
 ## Example
