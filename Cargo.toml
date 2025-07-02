@@ -1,6 +1,6 @@
 [package]
 name = "intel_tex_2"
-version = "0.4.0"
+version = "0.5.0"
 authors = ["Traverse Research <opensource@traverseresearch.nl>", "Graham Wihlidal <graham@wihlidal.ca>"]
 description = "Rust bindings for Intel's ISPC texture compressor."
 homepage = "https://github.com/Traverse-Research/intel-tex-rs-2"
