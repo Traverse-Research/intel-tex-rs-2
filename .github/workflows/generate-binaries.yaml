@@ -116,7 +116,16 @@ jobs:
       - name: Install additional targets
         run: rustup target add aarch64-pc-windows-msvc
 
-      - name: Build binaries
+      - name: Build binaries for dynamic CRT
+        run: |
+          cargo build --features=ispc
+          cargo build --features=ispc --target aarch64-pc-windows-msvc
+
+      # This regenerates the ISPC binaries, but those shouldn't be linking any
+      # CRT at all and be exempt from the naming change.
+      - name: Build binaries for static CRT
+        env:
+          RUSTFLAGS: -C target-feature=+crt-static
         run: |
           cargo build --features=ispc
           cargo build --features=ispc --target aarch64-pc-windows-msvc
