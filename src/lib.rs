@@ -34,9 +34,3 @@ pub struct Surface<'a, const COMPONENTS: usize> {
 pub type RgbaSurface<'a> = Surface<'a, 4>;
 pub type RgSurface<'a> = Surface<'a, 2>;
 pub type RSurface<'a> = Surface<'a, 1>;
-
-#[inline(always)]
-pub fn divide_up_by_multiple(val: u32, align: u32) -> u32 {
-    let mask: u32 = align - 1;
-    (val + mask) / align
-}

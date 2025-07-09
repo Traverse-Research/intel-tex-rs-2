@@ -36,7 +36,7 @@ fn main() {
         }
     }
 
-    let block_count = intel_tex_2::divide_up_by_multiple(width * height, 16);
+    let block_count = (width as usize * height as usize).div_ceil(16);
     println!("Block count: {}", block_count);
     let dds_defaults = NewDxgiParams {
         height,
