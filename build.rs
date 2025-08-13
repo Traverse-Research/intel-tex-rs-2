@@ -108,10 +108,10 @@ fn main() {
             libname += windows_mt;
             format!("{libname}.lib")
         }
-        x => panic!("Unknown target family {}", x),
+        x => panic!("Unknown target family {x}"),
     };
 
-    println!("cargo:rustc-link-lib=static={}", libname);
+    println!("cargo:rustc-link-lib=static={libname}");
 
     let libpath = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/ispc");
     println!("cargo:rustc-link-search=native={}", libpath.display());
