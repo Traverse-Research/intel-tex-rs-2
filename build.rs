@@ -28,10 +28,7 @@ fn main() {
             TargetISA::AVX512KNLi32x16,
             TargetISA::AVX512SKXi32x16,
         ],
-        "arm" | "aarch64" => vec![
-            // TargetISA::Neoni32x4,
-            TargetISA::Neoni32x8,
-        ],
+        "arm" | "aarch64" => vec![TargetISA::Neoni32x4],
         x => panic!("Unsupported target architecture {x}"),
     };
 
