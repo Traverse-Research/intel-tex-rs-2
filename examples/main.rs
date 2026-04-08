@@ -15,8 +15,8 @@ fn main() {
     let rgb_img = image::open(Path::new("examples/lambertian.jpg")).unwrap();
 
     let (width, height) = rgb_img.dimensions();
-    println!("Width is {}", width);
-    println!("Height is {}", height);
+    println!("Width is {width}");
+    println!("Height is {height}");
     println!("ColorType is {:?}", rgb_img.color());
 
     let mut rgba_img = ImageBuffer::new(width, height);
@@ -37,7 +37,7 @@ fn main() {
     }
 
     let block_count = intel_tex_2::divide_up_by_multiple(width * height, 16);
-    println!("Block count: {}", block_count);
+    println!("Block count: {block_count}");
     let dds_defaults = NewDxgiParams {
         height,
         width,

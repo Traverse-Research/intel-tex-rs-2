@@ -25,8 +25,8 @@ fn main() {
             TargetISA::SSE4i32x4,
             TargetISA::AVX1i32x8,
             TargetISA::AVX2i32x8,
-            TargetISA::AVX512KNLi32x16,
-            TargetISA::AVX512SKXi32x16,
+            // TargetISA::AVX512KNLx16,
+            TargetISA::AVX512SKXx16,
         ],
         "arm" | "aarch64" => vec![
             // TargetISA::Neoni32x4,
@@ -108,10 +108,10 @@ fn main() {
             libname += windows_mt;
             format!("{libname}.lib")
         }
-        x => panic!("Unknown target family {}", x),
+        x => panic!("Unknown target family {x}"),
     };
 
-    println!("cargo:rustc-link-lib=static={}", libname);
+    println!("cargo:rustc-link-lib=static={libname}");
 
     let libpath = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/ispc");
     println!("cargo:rustc-link-search=native={}", libpath.display());
