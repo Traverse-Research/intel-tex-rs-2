@@ -4,7 +4,7 @@ use crate::RgSurface;
 #[inline(always)]
 pub fn calc_output_size(width: u32, height: u32) -> usize {
     // BC5 uses 16 bytes to store each 4×4 block, giving it an average data rate of 1 byte per pixel.
-    let block_count = crate::divide_up_by_multiple(width * height, 16) as usize;
+    let block_count = crate::divide_up_by_multiple(width, 4) * crate::divide_up_by_multiple(height, 4) as usize;
     block_count * 16
 }
 
