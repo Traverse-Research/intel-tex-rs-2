@@ -17,7 +17,7 @@ pub struct EncodeSettings {
 #[inline(always)]
 pub fn calc_output_size(width: u32, height: u32) -> usize {
     // BC7 uses a fixed block size of 16 bytes (128 bits) and a fixed tile size of 4x4 texels.
-    let block_count = crate::divide_up_by_multiple(width * height, 16) as usize;
+    let block_count = (width as usize * height as usize).div_ceil(16);
     block_count * 16
 }
 
@@ -33,6 +33,8 @@ pub fn compress_blocks_into(settings: &EncodeSettings, surface: &RgbaSurface, bl
         blocks.len(),
         calc_output_size(surface.width, surface.height)
     );
+    assert!(surface.data.len() >= surface.height as usize * surface.stride as usize);
+
     let mut surface = kernel::rgba_surface {
         width: surface.width as i32,
         height: surface.height as i32,
