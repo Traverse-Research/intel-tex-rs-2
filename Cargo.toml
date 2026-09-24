@@ -34,10 +34,15 @@ ispc = ["ispc_compile", "cc"]
 
 [dev-dependencies]
 bcdec_rs = "0.2"
+criterion = "0.8"
 ddsfile = "0.6.0"
 half = "2"
 image = "0.25.1"
 texture2ddecoder = "0.1"
+
+[[bench]]
+name = "compress"
+harness = false
 
 [profile.release]
 lto = true
