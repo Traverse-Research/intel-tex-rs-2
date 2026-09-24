@@ -15,7 +15,9 @@
 This is a forked crate from from Graham Wihlidal's rust bindings repo for the ISPC texture compressor. The fork includes updates to the latest Intel ISPC texture compression, as well as some patches that were required to make it useful in production.
 
 * Graham's repo: https://github.com/gwihlidal/intel-tex-rs
-* ISPC texture compressor: https://github.com/GameTechDev/ISPCTextureCompressor
+* ISPC texture compressor: https://github.com/Traverse-Research/ISPCTextureCompressor
+
+Intel has discontinued the [original ISPC texture compressor](https://github.com/GameTechDev/ISPCTextureCompressor), so we've forked it as well: [Traverse-Research/ISPCTextureCompressor](https://github.com/Traverse-Research/ISPCTextureCompressor) is the kernel source this crate builds from (the `vendor` submodule). We maintain it and are actively fixing, improving and optimizing the encoders there.
 
 State of the art texture compression for BC6H, BC7, ETC1, ASTC and BC1/BC3.
 
