@@ -33,3 +33,26 @@ pub fn compress_blocks_into(surface: &RgSurface, blocks: &mut [u8]) {
         kernel::CompressBlocksBC5_ispc(&mut surface, blocks.as_mut_ptr());
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn output_size() {
+        assert_eq!(calc_output_size(0, 0), 0);
+        assert_eq!(calc_output_size(4, 4), 16);
+        assert_eq!(calc_output_size(8, 4), 2 * 16);
+        assert_eq!(calc_output_size(256, 256), 64 * 64 * 16);
+        assert_eq!(calc_output_size(4096, 4096), 1024 * 1024 * 16);
+        // Partial blocks are rounded up by texel count.
+        assert_eq!(calc_output_size(1, 1), 16);
+        assert_eq!(calc_output_size(4, 5), 2 * 16);
+    }
+
+    #[test]
+    #[cfg(target_pointer_width = "64")]
+    fn output_size_does_not_overflow_u32() {
+        assert_eq!(calc_output_size(65536, 65536), 16384 * 16384 * 16);
+    }
+}

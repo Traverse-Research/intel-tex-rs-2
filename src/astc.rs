@@ -282,3 +282,80 @@ extern "C" {
     );
 }
 */
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn presets_carry_block_size() {
+        for (w, h) in [(4, 4), (5, 4), (6, 6), (8, 5), (8, 8)] {
+            for s in [
+                opaque_fast_settings(w, h),
+                alpha_fast_settings(w, h),
+                alpha_slow_settings(w, h),
+            ] {
+                assert_eq!((s.block_width, s.block_height), (w, h));
+            }
+        }
+    }
+
+    #[test]
+    fn preset_channels() {
+        assert_eq!(opaque_fast_settings(4, 4).channels, 3);
+        assert_eq!(alpha_fast_settings(4, 4).channels, 4);
+        assert_eq!(alpha_slow_settings(4, 4).channels, 4);
+        assert!(
+            alpha_slow_settings(4, 4).fast_skip_threshold
+                > alpha_fast_settings(4, 4).fast_skip_threshold
+        );
+    }
+
+    #[test]
+    fn can_store_bounds() {
+        assert!(can_store(0, 1));
+        assert!(can_store(1, 1));
+        assert!(!can_store(2, 1));
+        assert!(can_store(255, 8));
+        assert!(!can_store(256, 8));
+        assert!(!can_store(-1, 8));
+    }
+
+    fn surface(data: &[u8], width: u32, height: u32) -> RgbaSurface<'_> {
+        RgbaSurface {
+            data,
+            width,
+            height,
+            stride: width * 4,
+        }
+    }
+
+    #[test]
+    #[should_panic(expected = "block_width <= 8")]
+    fn rejects_wide_blocks() {
+        let data = vec![0u8; 20 * 4 * 4];
+        compress_blocks(&opaque_fast_settings(10, 4), &surface(&data, 20, 4));
+    }
+
+    #[test]
+    #[should_panic(expected = "block_height <= 8")]
+    fn rejects_tall_blocks() {
+        let data = vec![0u8; 4 * 20 * 4];
+        compress_blocks(&opaque_fast_settings(4, 10), &surface(&data, 4, 20));
+    }
+
+    #[test]
+    #[should_panic]
+    fn rejects_width_not_multiple_of_block() {
+        let data = vec![0u8; 10 * 8 * 4];
+        compress_blocks(&opaque_fast_settings(4, 4), &surface(&data, 10, 8));
+    }
+
+    #[test]
+    #[ignore = "astc_encode is not implemented yet (it calls `unimplemented!()`)"]
+    fn compresses_solid_surface() {
+        let data = vec![128u8; 16 * 16 * 4];
+        let blocks = compress_blocks(&opaque_fast_settings(4, 4), &surface(&data, 16, 16));
+        assert_eq!(blocks.len(), calc_output_size(16, 16));
+    }
+}
