@@ -87,13 +87,13 @@ pub fn opaque_very_fast_settings() -> EncodeSettings {
     EncodeSettings {
         channels: 3,
         mode_selection: [false, true, false, true],
-        fast_skip_threshold_mode1: 3,
+        fast_skip_threshold_mode1: 1,
         fast_skip_threshold_mode3: 1,
         fast_skip_threshold_mode7: 0,
         skip_mode2: true,
         mode45_channel0: 0,
         refine_iterations_channel: 0,
-        refine_iterations: [2, 2, 2, 1, 2, 2, 1, 0],
+        refine_iterations: [1, 1, 1, 1, 1, 1, 1, 0],
     }
 }
 
@@ -102,7 +102,7 @@ pub fn opaque_fast_settings() -> EncodeSettings {
     EncodeSettings {
         channels: 3,
         mode_selection: [false, true, false, true],
-        fast_skip_threshold_mode1: 12,
+        fast_skip_threshold_mode1: 4,
         fast_skip_threshold_mode3: 4,
         fast_skip_threshold_mode7: 0,
         skip_mode2: true,
@@ -117,13 +117,13 @@ pub fn opaque_basic_settings() -> EncodeSettings {
     EncodeSettings {
         channels: 3,
         mode_selection: [true, true, true, true],
-        fast_skip_threshold_mode1: 8 + 4,
+        fast_skip_threshold_mode1: 8,
         fast_skip_threshold_mode3: 8,
         fast_skip_threshold_mode7: 0,
         skip_mode2: true,
         mode45_channel0: 0,
-        refine_iterations_channel: 2,
-        refine_iterations: [2, 2, 2, 2, 2, 2, 2, 0],
+        refine_iterations_channel: 1,
+        refine_iterations: [1, 1, 1, 1, 1, 1, 1, 0],
     }
 }
 
@@ -202,8 +202,8 @@ pub fn alpha_basic_settings() -> EncodeSettings {
     EncodeSettings {
         channels: 4,
         mode_selection: [true, true, true, true],
-        fast_skip_threshold_mode1: 8 + 4,
-        fast_skip_threshold_mode3: 8,
+        fast_skip_threshold_mode1: 6,
+        fast_skip_threshold_mode3: 6,
         fast_skip_threshold_mode7: 4,
         skip_mode2: true,
         mode45_channel0: 0,
