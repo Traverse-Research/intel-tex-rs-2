@@ -15,18 +15,18 @@ fn windows_mt_suffix() -> &'static str {
 
 #[cfg(feature = "ispc")]
 fn main() {
-    use ispc_compile::{bindgen::builder, Config, TargetISA};
+    use ispc_compile::{bindgen::builder, Config, TargetISA, CPU};
 
     let target_arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
-    #[allow(deprecated, reason = "Pending ISPC update")]
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
     let target_isas = match target_arch.as_str() {
         "x86" | "x86_64" => vec![
             TargetISA::SSE2i32x4,
             TargetISA::SSE4i32x4,
             TargetISA::AVX1i32x8,
             TargetISA::AVX2i32x8,
-            TargetISA::AVX512KNLi32x16,
-            TargetISA::AVX512SKXi32x16,
+            // AVX512KNL (Knights Landing) was removed in ISPC 1.31
+            TargetISA::AVX512SKXx16,
         ],
         "arm" | "aarch64" => vec![
             // TargetISA::Neoni32x4,
@@ -35,21 +35,33 @@ fn main() {
         x => panic!("Unsupported target architecture {x}"),
     };
 
-    Config::new()
-        .opt_level(2)
-        .woff()
-        .target_isas(target_isas.clone())
-        .out_dir("src/ispc")
-        .file("vendor/ispc_texcomp/kernel.ispc")
+    // ISPC otherwise tunes for (and enables the features of) the build host, which makes the
+    // checked-in binaries depend on whichever CI runner produced them. Pin the Apple targets
+    // to the oldest core they have to run on.
+    let cpu = || match (target_arch.as_str(), target_os.as_str()) {
+        ("aarch64", "macos") => Some(CPU::AppleA14), // M1
+        ("aarch64", "ios") => Some(CPU::AppleA7),
+        _ => None,
+    };
+    let config = |file: &str| {
+        let mut config = Config::new();
+        config
+            .opt_level(2)
+            .woff()
+            .target_isas(target_isas.clone())
+            .out_dir("src/ispc")
+            .file(file);
+        if let Some(cpu) = cpu() {
+            config.cpu(cpu);
+        }
+        config
+    };
+
+    config("vendor/ispc_texcomp/kernel.ispc")
         .bindgen_builder(builder().allowlist_function(r#"CompressBlocks(BC\dH?|ETC1)_ispc"#))
         .compile("kernel");
 
-    Config::new()
-        .opt_level(2)
-        .woff()
-        .target_isas(target_isas)
-        .out_dir("src/ispc")
-        .file("vendor/ispc_texcomp/kernel_astc.ispc")
+    config("vendor/ispc_texcomp/kernel_astc.ispc")
         .bindgen_builder(
             builder()
                 .allowlist_function("astc_rank_ispc")
