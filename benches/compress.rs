@@ -104,9 +104,6 @@ const BC7_ALPHA_PRESETS: [Preset<bc7::EncodeSettings>; 5] = [
 ];
 
 /// Fixed-rate formats: every size, natural content, reusing the output buffer.
-///
-/// This group must stay first: it is the only one that runs ETC1, and ETC1 has to run
-/// before any BC6H/BC7 call (see [`bench_content`]).
 fn bench_fixed_formats(c: &mut Criterion) {
     let sources: Vec<Source> = SIZES.iter().map(|&s| Source::new(&natural(s, s))).collect();
 
@@ -203,10 +200,6 @@ fn bench_size_scaling(c: &mut Criterion) {
 }
 
 /// Encoder speed depends on content: early-outs make flat blocks cheap and noise expensive.
-///
-/// ETC1 is deliberately left out: running it right after the BC6H/BC7 kernels here trips
-/// `assert(v<pow2(bits))` in the ISPC ETC1 packer (`compress_etc1_half_7` can read
-/// uninitialized `colors[q][7..10]` for empty clusters), which aborts the process.
 fn bench_content(c: &mut Criterion) {
     let images = [
         ("solid", solid(256, 256, [90, 140, 200, 255])),
@@ -227,6 +220,12 @@ fn bench_content(c: &mut Criterion) {
         let mut out = vec![0u8; bc1::calc_output_size(src.width, src.height)];
         group.bench_function(BenchmarkId::new("bc1", name), |b| {
             b.iter(|| bc1::compress_blocks_into(black_box(&src.rgba()), &mut out))
+        });
+
+        let mut out = vec![0u8; etc1::calc_output_size(src.width, src.height)];
+        let settings = etc1::slow_settings();
+        group.bench_function(BenchmarkId::new("etc1", name), |b| {
+            b.iter(|| etc1::compress_blocks_into(&settings, black_box(&src.rgba()), &mut out))
         });
 
         let mut out = vec![0u8; bc7::calc_output_size(src.width, src.height)];
@@ -328,7 +327,7 @@ fn encode_strips(settings: &bc7::EncodeSettings, src: &Source, out: &mut [u8], t
 }
 
 /// A real photograph (the example image) cropped to 1024x1024, through every codec's
-/// default preset. ETC1 is skipped for the same reason as in [`bench_content`].
+/// default preset.
 fn bench_photo(c: &mut Criterion) {
     let path = concat!(env!("CARGO_MANIFEST_DIR"), "/examples/lambertian.jpg");
     let photo = image::open(path)
@@ -339,7 +338,7 @@ fn bench_photo(c: &mut Criterion) {
     let mut group = c.benchmark_group("photo_1024");
     group.throughput(Throughput::Elements(1024 * 1024));
     group.sample_size(10);
-    for codec in ALL_CODECS.iter().filter(|c| c.name != "etc1") {
+    for codec in ALL_CODECS {
         let data = codec.input.convert(&crop);
         let stride = crop.width * codec.input.bytes_per_pixel() as u32;
         let mut out = vec![0u8; (codec.output_size)(crop.width, crop.height)];
