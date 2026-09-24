@@ -71,6 +71,18 @@ Compressing to BC7...
 Saving lambertian.dds file
 ```
 
+## Testing and benchmarks
+
+```console
+$ cargo test                                   # API, round-trip quality and preset tests
+$ cargo bench                                  # criterion benchmarks for every format and preset
+$ cargo bench -- bc7_alpha                     # only the BC7 alpha presets
+```
+
+The round-trip tests decode the output with independent reference decoders
+(`texture2ddecoder`, and `bcdec_rs` for BC6H) and check the PSNR against per-format floors.
+Benchmark reports are written to `target/criterion/report/index.html`.
+
 ## License
 
 Licensed under either of

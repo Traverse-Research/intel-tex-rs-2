@@ -48,3 +48,23 @@ pub fn slow_settings() -> EncodeSettings {
         fast_skip_threshold: 6,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn output_size() {
+        assert_eq!(calc_output_size(0, 0), 0);
+        assert_eq!(calc_output_size(4, 4), 8);
+        assert_eq!(calc_output_size(8, 4), 2 * 8);
+        assert_eq!(calc_output_size(256, 256), 64 * 64 * 8);
+        assert_eq!(calc_output_size(1, 1), 8);
+        assert_eq!(calc_output_size(4, 5), 2 * 8);
+    }
+
+    #[test]
+    fn slow_settings_threshold() {
+        assert_eq!(slow_settings().fast_skip_threshold, 6);
+    }
+}

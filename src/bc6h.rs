@@ -104,3 +104,58 @@ pub fn very_slow_settings() -> EncodeSettings {
         refine_iterations_2p: 2,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn output_size() {
+        assert_eq!(calc_output_size(0, 0), 0);
+        assert_eq!(calc_output_size(4, 4), 16);
+        assert_eq!(calc_output_size(8, 4), 2 * 16);
+        assert_eq!(calc_output_size(256, 256), 64 * 64 * 16);
+        assert_eq!(calc_output_size(1, 1), 16);
+        assert_eq!(calc_output_size(4, 5), 2 * 16);
+    }
+
+    const PRESETS: [fn() -> EncodeSettings; 5] = [
+        very_fast_settings,
+        fast_settings,
+        basic_settings,
+        slow_settings,
+        very_slow_settings,
+    ];
+
+    #[test]
+    fn presets_have_consistent_modes() {
+        for preset in PRESETS {
+            let s = preset();
+            assert!(!(s.slow_mode && s.fast_mode), "{s:?}");
+        }
+        assert!(very_fast_settings().fast_mode);
+        assert!(fast_settings().fast_mode);
+        assert!(!basic_settings().fast_mode && !basic_settings().slow_mode);
+        assert!(slow_settings().slow_mode);
+        assert!(very_slow_settings().slow_mode);
+    }
+
+    #[test]
+    fn presets_search_more_as_they_get_slower() {
+        for pair in PRESETS.windows(2) {
+            let (a, b) = (pair[0](), pair[1]());
+            assert!(
+                b.fast_skip_threshold >= a.fast_skip_threshold,
+                "{a:?} -> {b:?}"
+            );
+            assert!(
+                b.refine_iterations_1p >= a.refine_iterations_1p,
+                "{a:?} -> {b:?}"
+            );
+            assert!(
+                b.refine_iterations_2p >= a.refine_iterations_2p,
+                "{a:?} -> {b:?}"
+            );
+        }
+    }
+}
