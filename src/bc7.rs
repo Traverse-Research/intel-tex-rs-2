@@ -236,3 +236,78 @@ pub fn alpha_slow_settings() -> EncodeSettings {
         ],
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn output_size() {
+        assert_eq!(calc_output_size(0, 0), 0);
+        assert_eq!(calc_output_size(4, 4), 16);
+        assert_eq!(calc_output_size(8, 4), 2 * 16);
+        assert_eq!(calc_output_size(256, 256), 64 * 64 * 16);
+        assert_eq!(calc_output_size(1, 1), 16);
+        assert_eq!(calc_output_size(4, 5), 2 * 16);
+    }
+
+    const OPAQUE: [fn() -> EncodeSettings; 5] = [
+        opaque_ultra_fast_settings,
+        opaque_very_fast_settings,
+        opaque_fast_settings,
+        opaque_basic_settings,
+        opaque_slow_settings,
+    ];
+
+    const ALPHA: [fn() -> EncodeSettings; 5] = [
+        alpha_ultra_fast_settings,
+        alpha_very_fast_settings,
+        alpha_fast_settings,
+        alpha_basic_settings,
+        alpha_slow_settings,
+    ];
+
+    #[test]
+    fn opaque_presets_use_three_channels() {
+        for preset in OPAQUE {
+            let s = preset();
+            assert_eq!(s.channels, 3);
+            // Mode 7 (the last refine slot) is alpha-only and must be unused.
+            assert_eq!(s.refine_iterations[7], 0);
+            assert_eq!(s.fast_skip_threshold_mode7, 0);
+        }
+    }
+
+    #[test]
+    fn alpha_presets_use_four_channels() {
+        for preset in ALPHA {
+            assert_eq!(preset().channels, 4);
+        }
+    }
+
+    #[test]
+    fn presets_enable_at_least_one_mode_group() {
+        for preset in OPAQUE.iter().chain(&ALPHA) {
+            assert!(preset().mode_selection.iter().any(|&m| m));
+        }
+    }
+
+    #[test]
+    fn enabled_mode_groups_grow_with_quality() {
+        for presets in [OPAQUE, ALPHA] {
+            for pair in presets.windows(2) {
+                let (a, b) = (pair[0](), pair[1]());
+                for (ma, mb) in a.mode_selection.iter().zip(b.mode_selection) {
+                    assert!(!ma || mb, "{a:?} -> {b:?}");
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn slow_presets_try_mode2() {
+        assert!(!opaque_slow_settings().skip_mode2);
+        assert!(!alpha_slow_settings().skip_mode2);
+        assert!(opaque_basic_settings().skip_mode2);
+    }
+}
