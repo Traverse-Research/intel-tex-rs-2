@@ -13,6 +13,25 @@ fn windows_mt_suffix() -> &'static str {
     }
 }
 
+/// `ispc_texcomp_astc` is C++, so link the C++ standard library the prebuilt libraries were
+/// compiled against: GCC's on Linux, LLVM's on Apple targets and the NDK's on Android. MSVC links
+/// its C++ library as part of the CRT.
+#[cfg(not(feature = "ispc"))]
+fn link_cpp_stdlib() {
+    let target = std::env::var("TARGET").unwrap();
+    if target.contains("msvc") {
+        return;
+    }
+    let stdlib = if target.contains("apple") {
+        "c++"
+    } else if target.contains("android") {
+        "c++_shared"
+    } else {
+        "stdc++"
+    };
+    println!("cargo:rustc-link-lib={stdlib}");
+}
+
 #[cfg(feature = "ispc")]
 fn main() {
     use ispc_compile::{bindgen::builder, Config, TargetISA};
@@ -71,7 +90,9 @@ fn main() {
         ""
     };
 
+    // Compiling as C++ also makes `cc` link the C++ standard library.
     cc::Build::new()
+        .cpp(true)
         .include(out_dir)
         .file("vendor/ispc_texcomp/ispc_texcomp_astc.cpp")
         .out_dir("src/ispc")
@@ -116,4 +137,6 @@ fn main() {
     let libpath = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/ispc");
     println!("cargo:rustc-link-search=native={}", libpath.display());
     println!("cargo:rerun-if-changed={}", libpath.join(libfile).display());
+
+    link_cpp_stdlib();
 }
