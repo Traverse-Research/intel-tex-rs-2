@@ -13,6 +13,24 @@ fn windows_mt_suffix() -> &'static str {
     }
 }
 
+/// `ispc_texcomp_astc` is C++, so link the C++ standard library it needs, choosing it the same
+/// way as the `cc` crate does. MSVC links its C++ library as part of the CRT.
+fn link_cpp_stdlib() {
+    let target = std::env::var("TARGET").unwrap();
+    if target.contains("msvc") {
+        return;
+    }
+    let stdlib =
+        if target.contains("apple") || target.contains("freebsd") || target.contains("openbsd") {
+            "c++"
+        } else if target.contains("android") {
+            "c++_shared"
+        } else {
+            "stdc++"
+        };
+    println!("cargo:rustc-link-lib={stdlib}");
+}
+
 #[cfg(feature = "ispc")]
 fn main() {
     use ispc_compile::{bindgen::builder, Config, TargetISA};
@@ -84,6 +102,8 @@ fn main() {
             "ispc_texcomp_astc{}{target_mt}",
             std::env::var("TARGET").unwrap()
         ));
+
+    link_cpp_stdlib();
 }
 
 #[cfg(not(feature = "ispc"))]
@@ -116,4 +136,6 @@ fn main() {
     let libpath = Path::new(env!("CARGO_MANIFEST_DIR")).join("src/ispc");
     println!("cargo:rustc-link-search=native={}", libpath.display());
     println!("cargo:rerun-if-changed={}", libpath.join(libfile).display());
+
+    link_cpp_stdlib();
 }
